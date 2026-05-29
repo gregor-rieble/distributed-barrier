@@ -1,0 +1,9 @@
+spring:
+  threads:
+    virtual:
+      enabled: true
+
+barrier:
+  num-parties: 2
+  default-timeout-seconds: 60
+  shutdown-after-completions: 0
