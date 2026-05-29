@@ -1,4 +1,5 @@
 FROM maven:3.9-eclipse-temurin-25 AS build
+ARG RELEASE_VERSION=1.0-SNAPSHOT
 
 WORKDIR /app
 
@@ -6,7 +7,8 @@ COPY pom.xml .
 RUN mvn dependency:go-offline
 
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn -B --no-transfer-progress versions:set -DnewVersion="$RELEASE_VERSION" && \
+    mvn clean package -DskipTests
 
 
 FROM eclipse-temurin:25-jre

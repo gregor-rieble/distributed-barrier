@@ -8,9 +8,46 @@
     <artifactId>distributed-barrier</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <description>
+        A small Spring Boot application that exposes a distributed synchronization barrier over HTTP.
+        distributed-barrier lets multiple independent clients wait until a configured number of parties have reached the
+        same point. Once all required parties have arrived, the barrier is released and all waiting requests complete.
+        This can be useful for demos, integration tests, orchestration experiments, distributed system exercises, or any
+        situation where several processes need to rendezvous before continuing.
+    </description>
+
+    <url>https://github.com/gregor-rieble/distributed-barrier</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/license/mit/</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Gregor Rieble</name>
+            <email>gregor.rieble@gcoding.de</email>
+            <url>https://github.com/gregor-rieble</url>
+        </developer>
+    </developers>
+
+    <!-- @formatter:off -->
+    <scm>
+        <connection>scm:git:git://github.com/gregor-rieble/distributed-barrier.git</connection>
+        <developerConnection>scm:git:ssh://github.com:gregor-rieble/distributed-barrier.git</developerConnection>
+        <url>https://github.com/gregor-rieble/distributed-barrier/tree/main</url>
+    </scm>
+    <!-- @formatter:on -->
+
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.5.4</maven-failsafe-plugin.version>
+        <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     </properties>
 
     <parent>
@@ -39,10 +76,56 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${maven-failsafe-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>
+                        -XX:+EnableDynamicAgentLoading
+                        -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
+                        -Xshare:off
+                    </argLine>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

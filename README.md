@@ -191,13 +191,13 @@ Waits until the configured number of parties has reached the barrier.
 ### Build the Image
 
 ```bash
-docker build -t distributed-barrier .
+docker build -t ghcr.io/gregor-rieble/distributed-barrier .
 ```
 
 ### Run the Container
 
 ```bash
-docker run --rm -p 8080:8080 distributed-barrier
+docker run --rm -p 8080:8080 ghcr.io/gregor-rieble/distributed-barrier
 ```
 
 The application is then available at:
@@ -215,7 +215,7 @@ docker run --rm -p 8080:8080 \
   -e BARRIER_NUM_PARTIES=3 \
   -e BARRIER_DEFAULT_TIMEOUT_SECONDS=30 \
   -e BARRIER_SHUTDOWN_AFTER_COMPLETIONS=5 \
-    distributed-barrier
+    ghcr.io/gregor-rieble/distributed-barrier
 ```
 
 On Windows PowerShell:
@@ -225,7 +225,7 @@ docker run --rm -p 8080:8080 `
     -e BARRIER_NUM_PARTIES=3 `
     -e BARRIER_DEFAULT_TIMEOUT_SECONDS=30 `
     -e BARRIER_SHUTDOWN_AFTER_COMPLETIONS=5 `
-        distributed-barrier
+        ghcr.io/gregor-rieble/distributed-barrier
 ```
 
 ## Actuator
